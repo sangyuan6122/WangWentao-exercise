@@ -1,0 +1,44 @@
+Thinking1	ALS都有哪些应用场景
+ALS属于数据挖掘,可以做推荐系统,比如电影推荐,商品推荐,广告推荐
+
+Thinking2	ALS进行矩阵分解的时候，为什么可以并行化处理
+它的每个子任务之间没有什么依赖关系,只依赖自己，不依赖于其他的标的物的特征向量，所以可以将不同的的更新放到不同的服务器上执行。
+同理，当固定后，迭代更新时每个只依赖自己，不依赖于其他用户的特征向量，一样可以将不同用户的更新公式放到不同的服务器上执行。
+
+Thinking3	梯度下降法中的批量梯度下降（BGD），随机梯度下降（SGD），和小批量梯度下降有什么区别（MBGD）
+BGD:采用全量数据做梯度下降（速度慢，但迭代次数少；可以将所有的样本放在一个矩阵中，实现并行计算）
+SGD:用单条数据做梯度下降梯度下降（速度快，但是不利于实现并行操作）
+MBGD：用多条数据（数据量是个超参）做梯度下降（batch_size的选择是一个问题）
+
+Thinking4	你阅读过和推荐系统/计算广告/预测相关的论文么？有哪些论文是你比较推荐的，可以分享到微信群中
+推荐系统：Explainable Recommendation: A Survey and New Perspectives（https://arxiv.org/abs/1804.11192）
+        文章贡献如下（1）按照时间的顺序，对可解释性推荐研究进行综述，从早期的用户学习方法，到近期的基于model的方法。
+        （2）将可解释性推荐方法进行了归类，包括user-based, item-based, model-based, 以及post-model explanations。
+        （3）总结了可解释性推荐在不同领域的应用，包括product recommendation, social recommendation, POI recommendation等。
+        （4）从广义的IR和机器学习角度分析可解释性推荐以及他们之间的联系。
+        （5）最后提出了未来可探索的研究方向。
+计算广告:Scalable Hands-Free Transfer Learning for Online Advertising(https://dl.acm.org/doi/10.1145/2623330.2623349)
+       计算广告中经常遇到新广告冷启动的问题，利用迁移学习能较好解决该问题
+
+Action1	"对MovieLens数据集进行评分预测工具：可以使用Surprise或者其他 说明使用的模型，及简要原理"
+
+
+Action2	"Paper Reading：Slope one predictors for online rating-based collaborative filtering. Daniel Lemire and Anna Maclachlan, 2007. http://arxiv.org/abs/cs/0702144.
+积累，总结笔记，自己的思考及idea"
+笔记见：《Slope One Predictors for Online Rating-Based Collaborative Filtering(note).pdf》
+思考:
+Slope One 算法是由 Daniel Lemire 教授在 2005 年提出的一个Item-Based 的协同过滤推荐算法。和其它类似算法相比, 它的最大优点在于算法很简单, 易于实现, 执行效率高, 同时推荐的准确性相对较高。
+Slope One算法是基于不同物品之间的评分差的线性算法，预测用户对物品评分的个性化算法。主要3步:
+1) 计算物品之间的评分差的均值，记为物品间的评分偏差(两物品同时被评分)；
+2) 根据物品间的评分偏差和用户的历史评分，预测用户对未评分的物品的评分；
+3) 将预测评分排序，取topN对应的物品推荐给用户；
+使用场景:
+该算法适用于物品更新不频繁，数量相对较稳定并且物品数目明显小于用户数的场景。依赖用户的用户行为日志和物品偏好的相关内容。
+优点：
+1.算法简单，易于实现，执行效率高；
+2.可以发现用户潜在的兴趣爱好；
+缺点：
+依赖用户行为，存在冷启动问题和稀疏性问题。
+
+Action3	"设计你自己的句子生成器
+见'hero_syntax.py'
