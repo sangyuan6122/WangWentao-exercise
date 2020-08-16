@@ -36,8 +36,8 @@ perl triple_format_to_libfm.pl -in ratings.dat -target 2 -delete_column 3 -separ
 libFM -task r -method sgd -learn_rate 0.1 -train ratings.dat.libfm -test ratings.dat.libfm -dim '1,1,8' -out out.txt
 
 Action2：使用DeepFM对movielens进行评分预测
-见deepfm/deepfm_movielens_sample.py
+1)代码目录deepfm,见deepfm_movielens_sample.py
 
 Action3：使用基于邻域的协同过滤（KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline中的任意一种）对MovieLens数据集进行协同过滤，采用k折交叉验证(k=3)，输出每次计算的RMSE, MAE
-1)代码目录knn_cf
+1)代码目录knn_cf,见itemcf.py
 2)surprise用1.0.5版本，之后版本不支持data.split方法
