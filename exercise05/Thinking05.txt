@@ -1,0 +1,43 @@
+Thinking1：在推荐系统中，FM和MF哪个应用的更多，为什么
+1)FM应用的更多
+2)MF模型是FM模型的特例，MF可以被认为是只有User ID 和Item ID这两个特征Fields的FM模型，MF将这两类特征通过矩阵分解，来达到将这两类特征embedding化表达的目的。
+而FM则可以看作是MF模型的进一步拓展，除了User ID和Item ID这两类特征外，很多其它类型的特征，都可以进一步融入FM模型里
+3)从谁更早使用特征embedding表达这个角度来看的话，很明显，和FM比起来，MF才是真正的前辈，无非是特征类型比较少而已。
+而FM继承了MF的特征embedding化表达这个优点，同时引入了更多Side information作为特征，将更多特征及Side information embedding化融入FM模型中。
+所以很明显FM模型更灵活，能适应更多场合的应用范围。
+
+Thinking2：FFM与FM有哪些区别？
+1)两两特征组合的算法方面，FFM和FM是相同的，区别就是每个特征对应的特征embedding个数不同；FM每个特征只有一个共享的embedding向量，而对于FFM的一个特征，
+则有（N-1）个特征embedding向量，用于和不同的特征域特征组合时使用。
+2)FFM运算量非常大，需要计算的参数有nfk个，复杂度为O(k*n2)；而FM中需要计算的参数有nk个，复杂度为O(k*n)，在模型训练过程中n的数量非常大，所以，
+扩大f倍的情况下运算量指数型增加，而且容易过拟合，为减少运算量可以适当减少k的大小。
+
+Thinking3：DeepFM相比于FM解决了哪些问题，原理是怎样的
+1)DeepFM=FM+DNN,FM负责低阶，DNN负责高阶,在低阶和高阶特征组合上更接近真实世界，因此效果也更好
+2)设计了一种end-to-end的模型结构 => 无须特征工程
+
+Thinking4：Surprise工具中的baseline算法原理是怎样的？BaselineOnly和KNNBaseline有什么区别？
+1)baseline:基于统计的基准预测线打分,bᵤᵢ=μ+bᵤ+bᵢ,bᵤᵢ 预测值,bᵤ 用户对整体的偏差,bᵢ 商品对整体的偏差
+2)区别是KNN(邻域)
+
+
+Thinking5：基于邻域的协同过滤都有哪些算法，请简述原理
+1)基于邻域的协同过滤主要分为两类，UserCF,ItemCF
+  UserCF：给用户推荐和他兴趣相似的其他用户喜欢的物品
+  ItemCF：给用户推荐和他之前喜欢的物品相似的物品
+3)KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline
+
+Action1：使用libfm工具对movielens进行评分预测，采用SGD优化算法
+1)代码目录libfm
+2)下载movelines 1m(http://files.grouplens.org/datasets/movielens/ml-1m.zip)
+3)用perl工具及triple_format_to_libfm.pl脚本将ratings.dat转换为.libfm格式，命令:
+perl triple_format_to_libfm.pl -in ratings.dat -target 2 -delete_column 3 -separator "::"
+4)使用libFM工具，输出结果为out.txt(选择sgd需增加-learn_rate参数)
+libFM -task r -method sgd -learn_rate 0.1 -train ratings.dat.libfm -test ratings.dat.libfm -dim '1,1,8' -out out.txt
+
+Action2：使用DeepFM对movielens进行评分预测
+见deepfm/deepfm_movielens_sample.py
+
+Action3：使用基于邻域的协同过滤（KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline中的任意一种）对MovieLens数据集进行协同过滤，采用k折交叉验证(k=3)，输出每次计算的RMSE, MAE
+1)代码目录knn_cf
+2)surprise用1.0.5版本，之后版本不支持data.split方法
